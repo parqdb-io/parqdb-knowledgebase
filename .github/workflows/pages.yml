@@ -41,6 +41,8 @@ jobs:
       - run: parqdb-kb build docs --base-url "${{ github.event.repository.homepage || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}" --nlist 1
       - run: npm ci --ignore-scripts
         working-directory: web
+      - run: npm ci --ignore-scripts
+        working-directory: vendor/parqdb/browser
       - run: cargo build --manifest-path vendor/parqdb/Cargo.toml -p parqdb-browser-kernels --target wasm32-unknown-unknown --release
       - run: npm run check && npm run build
         working-directory: web
