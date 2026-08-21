@@ -1,0 +1,12 @@
+.venv/
+.parqdb-kb/
+.pytest_cache/
+.ruff_cache/
+__pycache__/
+_site/
+vendor/
+web/node_modules/
+web/public/data/
+web/public/docs/
+web/public/*.html
+web/public/**/*.html

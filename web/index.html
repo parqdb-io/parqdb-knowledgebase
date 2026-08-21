@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#070907" />
+    <meta name="description" content="A serverless knowledge base powered by ParqDB." />
+    <title>ParqDB Knowledgebase</title>
+    <script type="module" src="/src/main.ts"></script>
+  </head>
+  <body>
+    <main>
+      <header><span>PARQDB // KNOWLEDGEBASE</span><a href="https://github.com/parqdb-io/parqdb">⭐ STAR ON GITHUB ↗</a></header>
+      <section class="hero">
+        <p class="prompt">&gt; NO QUERY SERVER. JUST OBJECT STORAGE + YOUR BROWSER.</p>
+        <h1>SEARCH THE KNOWLEDGE BASE.</h1>
+        <form id="search-form">
+          <input id="query" autocomplete="off" placeholder="Ask the documentation…" aria-label="Search query" />
+          <button id="search" disabled>SEARCH ↵</button>
+        </form>
+        <div class="status" id="status">LOADING TRANSFORMER…</div>
+      </section>
+      <section class="results" id="results"><p>Results will appear here.</p></section>
+      <footer>IVF-LVQ8 · PARQUET · HTTP RANGE · WASM</footer>
+    </main>
+  </body>
+</html>

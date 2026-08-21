@@ -1,0 +1,54 @@
+name: Build and deploy knowledge base
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: parqdb-io/parqdb
+          path: vendor/parqdb
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: wasm32-unknown-unknown
+      - run: python -m pip install ./vendor/parqdb "parqdb-knowledgebase @ file://${{ github.workspace }}"
+      - run: parqdb-kb build docs --base-url "${{ github.event.repository.homepage || format('https://{0}.github.io/{1}', github.repository_owner, github.event.repository.name) }}" --nlist 1
+      - run: npm ci --ignore-scripts
+        working-directory: web
+      - run: cargo build --manifest-path vendor/parqdb/Cargo.toml -p parqdb-browser-kernels --target wasm32-unknown-unknown --release
+      - run: npm run check && npm run build
+        working-directory: web
+        env:
+          PARQDB_ROOT: ${{ github.workspace }}/vendor/parqdb
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+      - id: deployment
+        uses: actions/deploy-pages@v4
